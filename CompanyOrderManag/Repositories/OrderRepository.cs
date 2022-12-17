@@ -14,9 +14,27 @@ namespace CompanyOrderManag.Repositories
             this._context = context;
         }
 
-        public bool CreateOrder(Order order)
+        public bool CreateOrder(int productId, int companyId, Order order)
         {
+            var product = _context.Products.Where(p => p.Id == productId).FirstOrDefault();
+            var company = _context.Companies.Where(c => c.Id == companyId).FirstOrDefault();
+
+            var productData = new Product() // Inster into PokemonOwner tabel
+            {
+                Product = product,
+            };
+
+            _context.Add(productData);
+
+            var companyData = new PokemonCategory()
+            {
+                Company = company,
+            };
+
+            _context.Add(companyData);
+
             _context.Add(order);
+
             return Save();
         }
 

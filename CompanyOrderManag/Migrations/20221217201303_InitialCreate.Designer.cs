@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CompanyOrderManag.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221217180956_InitialCreate")]
+    [Migration("20221217201303_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -59,13 +59,13 @@ namespace CompanyOrderManag.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -89,7 +89,7 @@ namespace CompanyOrderManag.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -111,32 +111,44 @@ namespace CompanyOrderManag.Migrations
 
             modelBuilder.Entity("CompanyOrderManag.Models.Order", b =>
                 {
-                    b.HasOne("CompanyOrderManag.Models.Company", null)
-                        .WithMany("Order")
-                        .HasForeignKey("CompanyId");
+                    b.HasOne("CompanyOrderManag.Models.Company", "Company")
+                        .WithMany("Orders")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("CompanyOrderManag.Models.Product", null)
-                        .WithMany("Order")
-                        .HasForeignKey("ProductId");
-                });
+                    b.HasOne("CompanyOrderManag.Models.Product", "Product")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("CompanyOrderManag.Models.Product", b =>
-                {
-                    b.HasOne("CompanyOrderManag.Models.Company", null)
-                        .WithMany("Product")
-                        .HasForeignKey("CompanyId");
-                });
-
-            modelBuilder.Entity("CompanyOrderManag.Models.Company", b =>
-                {
-                    b.Navigation("Order");
+                    b.Navigation("Company");
 
                     b.Navigation("Product");
                 });
 
             modelBuilder.Entity("CompanyOrderManag.Models.Product", b =>
                 {
-                    b.Navigation("Order");
+                    b.HasOne("CompanyOrderManag.Models.Company", "Company")
+                        .WithMany("Products")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("CompanyOrderManag.Models.Company", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("CompanyOrderManag.Models.Product", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
