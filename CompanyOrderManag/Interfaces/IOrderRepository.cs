@@ -7,7 +7,7 @@ namespace CompanyOrderManag.Interfaces
         ICollection<Order> GetOrders();
         Order GetOrder(int id);
         bool OrderExist(int id);
-        bool CreateOrder(int productId, int companyId, Order order);
+        bool CreateOrder(Order order);
         bool Save();
     }
 }

@@ -19,8 +19,8 @@ namespace CompanyOrderManag.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     state = table.Column<bool>(type: "bit", nullable: false),
-                    PomationStartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    PromationEndTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                    PomationStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PromationEndTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,14 +67,12 @@ namespace CompanyOrderManag.Migrations
                         name: "FK_Orders_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Orders_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

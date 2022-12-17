@@ -1,6 +1,8 @@
 using CompanyOrderManag.Data;
 using Microsoft.EntityFrameworkCore;
 using CompanyOrderManag;
+using CompanyOrderManag.Interfaces;
+using CompanyOrderManag.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>(); // Seeding
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // Auto Mapper
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CompanyOrderManag.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221217201303_InitialCreate")]
+    [Migration("20221217232814_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,11 +37,11 @@ namespace CompanyOrderManag.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("PomationStartTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("PomationStartTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("PromationEndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("PromationEndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("state")
                         .HasColumnType("bit");

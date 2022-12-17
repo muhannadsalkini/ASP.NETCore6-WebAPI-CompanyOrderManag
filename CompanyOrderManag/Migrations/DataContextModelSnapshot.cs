@@ -34,11 +34,11 @@ namespace CompanyOrderManag.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("PomationStartTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("PomationStartTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("PromationEndTime")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("PromationEndTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("state")
                         .HasColumnType("bit");

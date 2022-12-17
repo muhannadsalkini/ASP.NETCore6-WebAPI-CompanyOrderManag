@@ -5,6 +5,8 @@ using CompanyOrderManag.Models;
 using CompanyOrderManag.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.CodeAnalysis.MSBuild;
+using System.ComponentModel.Design;
 
 namespace CompanyOrderManag.Controllers
 {
@@ -14,12 +16,14 @@ namespace CompanyOrderManag.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ICompanyRepository _companyRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
-        public OrderController(IOrderRepository orderRepository, ICompanyRepository companyRepository, IMapper mapper)
+        public OrderController(IOrderRepository orderRepository, ICompanyRepository companyRepository, IProductRepository productRepository, IMapper mapper)
         {
             this._orderRepository = orderRepository;
             this._companyRepository = companyRepository;
+            this._productRepository = productRepository;
             _mapper = mapper;
         }
 
@@ -38,7 +42,7 @@ namespace CompanyOrderManag.Controllers
         [HttpPost] // post
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateOrder([FromQuery] int orderId, [FromQuery] int CompanyId, [FromBody] OrderDto orderCreate)
+        public IActionResult CreateOrder([FromQuery] int productId, [FromQuery] int CompanyId, [FromBody] OrderDto orderCreate)
         {
             if (orderCreate == null)
                 return BadRequest(ModelState);
@@ -48,12 +52,11 @@ namespace CompanyOrderManag.Controllers
 
             Company company = _companyRepository.GetCompany(CompanyId);
 
-            DateTime CurrentTime = DateTime.Now;
-            DateTime CurrentDate = DateTime.Today;
+            DateTime CurrentTime = DateTime.Now; 
 
-            if(CurrentTime < CurrentDate + company.PomationStartTime || CurrentTime > CurrentDate + company.PromationEndTime)
+            if(CurrentTime.Hour < company.PomationStartTime.Hour || CurrentTime.Hour > company.PromationEndTime.Hour)
             {
-                ModelState.AddModelError("", "Cannot Order at " + CurrentTime.Hour);
+                ModelState.AddModelError("", "Company not receving orders at time");
                 return BadRequest(ModelState);
             }
 
@@ -64,9 +67,11 @@ namespace CompanyOrderManag.Controllers
             }
 
             var orderMap = _mapper.Map<Order>(orderCreate);
+            orderMap.Company = _companyRepository.GetCompany(CompanyId);
+            orderMap.Product = _productRepository.GetProduct(productId);
 
             // If an error pccurs while saving
-            if (!_orderRepository.CreateOrder(orderId, CompanyId, orderMap))
+            if (!_orderRepository.CreateOrder(orderMap))
             {
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);

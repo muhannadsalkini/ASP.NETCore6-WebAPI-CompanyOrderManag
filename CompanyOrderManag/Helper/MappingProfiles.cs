@@ -13,8 +13,8 @@ namespace CompanyOrderManag.Helper
             CreateMap<CompanyDto, Company>();
             CreateMap<Order, OrderDto>();
             CreateMap<OrderDto, Order>();
-            CreateMap<Company, CompanyDto>();
-            CreateMap<CompanyDto, Company>();
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>();
         }
     }
 }
