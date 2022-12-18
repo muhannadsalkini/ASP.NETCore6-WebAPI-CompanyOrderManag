@@ -9,7 +9,7 @@ This project consists  of Service, Company, Company Products and Order systems.
 - Update confirmation state for a company
 - Show all companies
 - Add products to a company
-- Create orders only between company Order-Release time
+- Create orders only in company Order-Release time
 - Create orders only for approved companies
 - Show a result message for orders creating
 
