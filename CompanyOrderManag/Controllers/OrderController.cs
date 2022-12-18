@@ -27,6 +27,7 @@ namespace CompanyOrderManag.Controllers
             _mapper = mapper;
         }
 
+        // Show all orders
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Order>))]
         public IActionResult getOrders()
@@ -39,6 +40,7 @@ namespace CompanyOrderManag.Controllers
             return Ok(orders);
         }
 
+        // Creat a new order
         [HttpPost] // post
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -52,14 +54,16 @@ namespace CompanyOrderManag.Controllers
 
             Company company = _companyRepository.GetCompany(CompanyId);
 
-            DateTime CurrentTime = DateTime.Now; 
+            DateTime CurrentTime = DateTime.Now;
 
-            if(CurrentTime.Hour < company.PomationStartTime.Hour || CurrentTime.Hour > company.PromationEndTime.Hour)
+            // Cheack if the current time is in company Order-Release time
+            if (CurrentTime.Hour < company.PomationStartTime.Hour || CurrentTime.Hour > company.PromationEndTime.Hour)
             {
                 ModelState.AddModelError("", "Company not receving orders at time");
                 return BadRequest(ModelState);
             }
-
+            
+            // Check the company satate
             if (company.state == false)
             {
                 ModelState.AddModelError("", "Company is closed!");
@@ -70,7 +74,7 @@ namespace CompanyOrderManag.Controllers
             orderMap.Company = _companyRepository.GetCompany(CompanyId);
             orderMap.Product = _productRepository.GetProduct(productId);
 
-            // If an error pccurs while saving
+            // If thre are an error occurs while saving
             if (!_orderRepository.CreateOrder(orderMap))
             {
                 ModelState.AddModelError("", "Something went wrong while saving");

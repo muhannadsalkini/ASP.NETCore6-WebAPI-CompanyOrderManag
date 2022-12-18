@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyOrderManag.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : Controller
@@ -21,18 +22,20 @@ namespace CompanyOrderManag.Controllers
             this._mapper = mapper;
         }
 
+        // Show all products
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
         public IActionResult getProducts() 
         {
             var products = _productRepository.GetProducts();
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) // validation check
                 return BadRequest(ModelState);
 
             return Ok(products);
         }
 
+        // Creat a new product
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -41,6 +44,7 @@ namespace CompanyOrderManag.Controllers
             if (productCreate == null)
                 return BadRequest(ModelState);
 
+            // Check if there are an existing product with same name
             var product = _productRepository.GetProducts()
                 .Where(o => o.Name.Trim().ToUpper() == productCreate.Name.TrimEnd().ToUpper())
                 .FirstOrDefault();
@@ -56,7 +60,7 @@ namespace CompanyOrderManag.Controllers
 
             var productMap = _mapper.Map<Product>(productCreate);
 
-            productMap.Company = _companyRepository.GetCompany(companyId);
+            productMap.Company = _companyRepository.GetCompany(companyId); // Add company to the product
 
             if (!_productRepository.CreateProduct(productMap))
             {

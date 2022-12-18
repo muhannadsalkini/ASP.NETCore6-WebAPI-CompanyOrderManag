@@ -3,6 +3,8 @@ using CompanyOrderManag.Dto;
 using CompanyOrderManag.Models;
 using System.Diagnostics.Metrics;
 
+// An AutoMapper to creat methods
+
 namespace CompanyOrderManag.Helper
 {
     public class MappingProfiles : Profile

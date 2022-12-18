@@ -23,6 +23,7 @@ namespace CompanyOrderManag.Controllers
             this._mapper = mapper;
         }
 
+        // Show all companies
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Company>))] // To make API looks cleaner
         public IActionResult GetCompanies() // Returning a list of Companies
@@ -35,6 +36,7 @@ namespace CompanyOrderManag.Controllers
             return Ok(companies);
         }
 
+        // Show a specified company
         [HttpGet("{companyId}")]
         [ProducesResponseType(200, Type = typeof(Company))]
         [ProducesResponseType(400)]
@@ -51,6 +53,7 @@ namespace CompanyOrderManag.Controllers
             return Ok(company);
         }
 
+        // Creat a new company
         [HttpPost] // post
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -59,7 +62,7 @@ namespace CompanyOrderManag.Controllers
             if (companyCreate == null)
                 return BadRequest(ModelState);
 
-           // Control statement to not add a new company with used name
+           // Check if there are a company with the same name
            var company = _companyRepository.GetCompanies()
                .Where(c => c.Name.Trim().ToUpper() == companyCreate.Name.TrimEnd().ToUpper())
                .FirstOrDefault();
@@ -85,6 +88,7 @@ namespace CompanyOrderManag.Controllers
             return Ok("Successfuly created");
         }
 
+        // Update an exist company
         [HttpPut("{companyId}")] // put
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
