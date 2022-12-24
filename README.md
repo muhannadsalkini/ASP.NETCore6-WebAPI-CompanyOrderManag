@@ -1,4 +1,4 @@
-# SP.NET Core6 Web API - CompanyOrderManag
+# ASP.NET Core6 API - CompanyOrderManag
 ## Hackathon project
 
 This project consists  of Service, Company, Company Products and Order systems.
